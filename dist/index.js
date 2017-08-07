@@ -57,4 +57,4 @@ app.use(router.routes()).use(router.allowedMethods());
 var port = process.env.PORT || 3000;
 app.use(rollbar.errorHandler("8af6d3888b364772abefb2b4241d98f3"));
 
-app.listen(3000);
+app.listen(port);
