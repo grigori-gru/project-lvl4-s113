@@ -1,5 +1,8 @@
 start:
-			npm run nodemon -- src/index.js --exec babel-node
+			npm run nodemon -- --exec npm run gulp server
 
 build:
 			npm run build
+
+lint:
+			npm run eslint -- src

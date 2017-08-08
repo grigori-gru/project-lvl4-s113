@@ -4,10 +4,12 @@
   "description": "task manager",
   "main": "index.js",
   "scripts": {
+    "gulp": "gulp",
     "nodemon": "nodemon",
     "babel-node": "babel-node",
     "build": "NODE_ENV=production babel src -d dist",
-    "serve": "node dist/index.js",
+    "start": "gulp server",
+    "eslint": "eslint",
     "test": "jest"
   },
   "repository": {
@@ -42,6 +44,12 @@
     "webpack": "^3.4.1"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.4.1",
+    "eslint-config-airbnb-base": "^11.3.1",
+    "eslint-plugin-flowtype": "^2.35.0",
+    "eslint-plugin-import": "^2.7.0",
+    "gulp": "^3.9.1",
     "nodemon": "^1.11.0"
   }
 }
