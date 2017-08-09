@@ -17,14 +17,14 @@ describe('requests', () => {
 
   it('GET /', async () => {
     const query = request(server);
-    const res1 = await query.get('/');
-    expect(res1).toHaveHTTPStatus(200);
+    const res = await query.get('/');
+    expect(res).toHaveHTTPStatus(200);
   });
 
   it('GET error', async () => {
     const query = request(server);
-    const res1 = await query.get('error');
-    expect(res1).toHaveHTTPStatus(404);
+    const res = await query.get('/error');
+    expect(res).toHaveHTTPStatus(404);
   });
 
   afterEach((done) => {

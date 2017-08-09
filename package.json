@@ -10,7 +10,8 @@
     "build": "NODE_ENV=production babel src -d dist",
     "start": "gulp server",
     "eslint": "eslint",
-    "test": "jest"
+    "test": "jest",
+    "testwatch": "jest --watch"
   },
   "repository": {
     "type": "git",
