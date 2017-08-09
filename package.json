@@ -50,6 +50,8 @@
     "eslint-plugin-flowtype": "^2.35.0",
     "eslint-plugin-import": "^2.7.0",
     "gulp": "^3.9.1",
-    "nodemon": "^1.11.0"
+    "jest-supertest-matchers": "0.0.1",
+    "nodemon": "^1.11.0",
+    "supertest": "^3.0.0"
   }
 }
