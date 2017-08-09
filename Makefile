@@ -6,3 +6,5 @@ build:
 
 lint:
 			npm run eslint -- src
+test:
+			npm run test
