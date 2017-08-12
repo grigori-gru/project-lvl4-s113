@@ -1,0 +1,14 @@
+doctype html
+html(lang="en")
+  head
+    title= Title
+    script(src='/assets/application.js')
+  body
+    nav.navbar.navbar-toggleable-md.navbar-inverse.bg-primary
+      button.navbar-toggler.navbar-toggler-right
+        span.navbar-toggler-icon
+      a.navbar-brand(href="/") Hello world!
+      .collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.active
+    block content

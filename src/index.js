@@ -1,24 +1,39 @@
 import 'babel-polyfill';
 
+import middleware from 'koa-webpack';
 import Koa from 'koa';
+import Pug from 'koa-pug';
 import Router from 'koa-router';
 import Rollbar from 'rollbar';
+import path from 'path';
+
+import getWebpackConfig from '../webpack.config.babel';
 
 export default () => {
   const app = new Koa();
+
+  if (process.env.NODE_ENV !== 'test') {
+    app.use(middleware({
+      config: getWebpackConfig(),
+    }));
+  }
+
   const router = new Router();
 
-  // include and initialize the rollbar library with your access token
-  const rollbar = new Rollbar('8af6d3888b364772abefb2b4241d98f3');
+  const pug = new Pug({
+    viewPath: path.join(__dirname, './views'),
+  });
 
-  // record a generic message and send it to Rollbar
-  rollbar.log('Hello world!');
+  pug.use(app);
 
   router.get('/', async (ctx) => {
-    ctx.body = 'Router World';
+    ctx.render('index');
   });
 
   app.use(router.routes()).use(router.allowedMethods());
+
+  const rollbar = new Rollbar('8af6d3888b364772abefb2b4241d98f3');
+  rollbar.log('Hello world!');
 
   app.use(rollbar.errorHandler('8af6d3888b364772abefb2b4241d98f3'));
 
