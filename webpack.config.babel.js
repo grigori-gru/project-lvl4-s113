@@ -1,5 +1,5 @@
 import path from 'path';
-// import webpack from 'webpack';
+import webpack from 'webpack';
 
 export default () => ({
   entry: './client',
@@ -19,9 +19,17 @@ export default () => ({
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          'postcss-loader',
         ],
       },
     ],
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+    }),
+  ],
 });
