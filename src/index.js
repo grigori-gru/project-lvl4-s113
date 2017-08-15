@@ -6,8 +6,11 @@ import Pug from 'koa-pug';
 import Router from 'koa-router';
 import Rollbar from 'rollbar';
 import path from 'path';
+import dotenv from 'dotenv';
 
 import getWebpackConfig from '../webpack.config.babel';
+
+dotenv.config();
 
 export default () => {
   const app = new Koa();
@@ -31,11 +34,12 @@ export default () => {
   });
 
   app.use(router.routes()).use(router.allowedMethods());
+  const rollbarAccessToken = process.env.POST_SERVER_ITEM_ACCESS_TOKEN;
 
-  const rollbar = new Rollbar('8af6d3888b364772abefb2b4241d98f3');
+  const rollbar = new Rollbar(rollbarAccessToken);
   rollbar.log('Hello world!');
 
-  app.use(rollbar.errorHandler('8af6d3888b364772abefb2b4241d98f3'));
+  app.use(rollbar.errorHandler(rollbarAccessToken));
 
   return app;
 };
