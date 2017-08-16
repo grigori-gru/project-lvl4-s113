@@ -37,9 +37,10 @@ export default () => {
   const rollbarAccessToken = process.env.POST_SERVER_ITEM_ACCESS_TOKEN;
 
   const rollbar = new Rollbar(rollbarAccessToken);
-  rollbar.log('Hello world!');
 
   app.use(rollbar.errorHandler(rollbarAccessToken));
+
+  rollbar.log('Hello world!');
 
   return app;
 };
