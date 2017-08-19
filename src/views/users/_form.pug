@@ -1,0 +1,26 @@
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | FirstName
+      sup *
+    input.form-control(name='firstName' value=form.firstName)
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | LastName
+      sup *
+    textarea.form-control(name='lastName' value=form.lastName)
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | Email
+      sup *
+    textarea.form-control(name='email' value=form.email)
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | Password
+      sup *
+    textarea.form-control(name='password' value=form.password)
+.form-group
+  button.btn.btn-primary.btn-block(type='submit') Save

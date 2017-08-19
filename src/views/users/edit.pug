@@ -1,0 +1,8 @@
+extends ../layouts/layout.pug
+
+block content
+  .row.mt-3
+     .col-sm-6.mx-auto
+       h3.text-xs-center Edit '#{user.firstName}'
+       form(action=`/users/${user.id}?_method=PATCH` method='post')
+         include _form.pug

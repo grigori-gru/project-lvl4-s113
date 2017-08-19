@@ -4,11 +4,18 @@ html(lang="en")
     title= Title
     script(src='/assets/application.js')
   body
-    nav.navbar.navbar-toggleable-md.navbar-inverse.bg-primary
-      button.navbar-toggler.navbar-toggler-right
-        span.navbar-toggler-icon
-      a.navbar-brand(href="/") Hello world!
-      .collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-          li.nav-item.active
-    block content
+    nav.navbar.navbar-light.bg-faded
+      a.navbar-brand(href="/") Main Page
+      ul.nav.navbar-nav.float-xs-right
+      li.nav-item
+        a.nav-link(href="/users") Users
+      if isSignedIn()
+        form.form-inline.float-xs-right(action='/sessions?_method=DELETE' method='post')
+          button.btn.btn-link(type='submit') Sign out
+      else
+        li.nav-item
+          a.nav-link(href="/sessions/new") Sign in
+          li.nav-item
+            a.nav-link(href="/users/new") Sign up
+    .container
+      block content
