@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "task manager",
   "main": "index.js",
+  "engines": {
+    "node": "8.2.1"
+  },
   "scripts": {
     "gulp": "gulp",
     "nodemon": "nodemon",
