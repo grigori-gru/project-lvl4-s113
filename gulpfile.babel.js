@@ -1,20 +1,27 @@
 import 'babel-polyfill';
-
-// import repl from 'repl';
 import gulp from 'gulp';
-// import gutil from 'gulp-util';
-import startServer from './src';
+import repl from 'repl';
+import gutil from 'gulp-util';
 
-// gulp.task('console', () => {
-//   gutil.log = gutil.noop;
-//   const replServer = repl.start({
-//     prompt: 'Application console > ',
-//   });
-//
-//   Object.keys(container).forEach((key) => {
-//     replServer.context[key] = container[key];
-//   });
-// });
+import init from './src/init';
+import startServer from './src';
+import container from './src/container';
+
+gulp.task('console', () => {
+  gutil.log = gutil.noop;
+  const replServer = repl.start({
+    prompt: 'Application console > ',
+  });
+
+  Object.keys(container).forEach((key) => {
+    replServer.context[key] = container[key];
+  });
+});
+
+gulp.task('db init', async () => {
+  await init();
+  console.log('db created');
+});
 
 gulp.task('server', () =>
   startServer().listen(process.env.PORT || 3000));

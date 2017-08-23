@@ -18,4 +18,7 @@ html(lang="en")
           li.nav-item
             a.nav-link(href="/users/new") Sign up
     .container
+      - const msg = flash.get()
+      if msg
+        .alert.alert-info.m-3= msg
       block content

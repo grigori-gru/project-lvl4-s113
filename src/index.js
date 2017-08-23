@@ -10,9 +10,11 @@ import Router from 'koa-router';
 import Pug from 'koa-pug';
 import methodOverride from 'koa-methodoverride';
 import session from 'koa-generic-session';
+import flash from 'koa-flash-simple';
 
 import getWebpackConfig from '../webpack.config.babel';
 import getRoutes from './controllers';
+import container from './container';
 
 dotenv.config();
 
@@ -21,14 +23,16 @@ export default () => {
 
   app.keys = ['session secret'];
   app.use(session(app));
-  app.use(bodyParser());
-  app.use(methodOverride('_method'));
+  app.use(flash());
   app.use(async (ctx, next) => {
     ctx.state = {
+      flash: ctx.flash,
       isSignedIn: () => ctx.session.id !== undefined,
     };
     await next();
   });
+  app.use(bodyParser());
+  app.use(methodOverride('_method'));
 
   if (process.env.NODE_ENV !== 'test') {
     app.use(middleware({
@@ -43,7 +47,7 @@ export default () => {
   });
 
   pug.use(app);
-  getRoutes(router);
+  getRoutes(router, container);
 
   app.use(router.routes()).use(router.allowedMethods());
   const rollbarAccessToken = process.env.POST_SERVER_ITEM_ACCESS_TOKEN;

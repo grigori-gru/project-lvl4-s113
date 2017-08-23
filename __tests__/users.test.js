@@ -1,16 +1,25 @@
 import request from 'supertest'; // eslint-disable-line
 import matchers from 'jest-supertest-matchers'; // eslint-disable-line
+// import SequelizeMock from 'sequelize-mock';
 
 import app from '../src';
 
+// const dbMock = new SequelizeMock();
+
 describe('requests', () => {
   let server;
-
+  // let userMock;
   beforeAll(() => {
     jasmine.addMatchers(matchers);
   });
 
   beforeEach(() => {
+    // userMock = dbMock.define('user', {
+    //   firstName: 'firstName',
+    //   lastName: 'lastName',
+    //   email: 'email@mail.ru',
+    //   password: 'qwerty',
+    // });
     server = app().listen();
   });
 
@@ -31,6 +40,7 @@ describe('requests', () => {
   it('GET /', async () => {
     const res = await request(server)
       .get('/');
+    // console.log(userMock);
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -99,17 +109,17 @@ describe('requests', () => {
     expect(res2).toHaveHTTPStatus(422);
   });
 
-  // it('DELETE users/:id', async () => {
-  //   const res1 = await request(server)
-  //     .post('/users')
-  //     .type('form')
-  //     .send(body);
-  //   expect(res1).toHaveHTTPStatus(302);
-  //   const url = res1.headers.location.split('/').join('/');
-  //   const res2 = await request(server)
-  //     .delete(url);
-  //   expect(res2).toHaveHTTPStatus(302);
-  // });
+  it('DELETE users/:id', async () => {
+    const res1 = await request(server)
+      .post('/users')
+      .type('form')
+      .send(body);
+    expect(res1).toHaveHTTPStatus(302);
+    const url = res1.headers.location.split('/').join('/');
+    const res2 = await request(server)
+      .delete(url);
+    expect(res2).toHaveHTTPStatus(302);
+  });
 
   afterEach((done) => {
     server.close();

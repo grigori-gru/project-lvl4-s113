@@ -4,8 +4,6 @@ block content
   .row.text-xs-center.mt-3
       .col-sm-4.mx-auto
         h3 Login form
-        if error
-          .alert.alert-warning= error
         form(action='/sessions' method='post')
           .row.form-group
             .col-sm
