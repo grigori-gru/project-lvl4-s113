@@ -31,6 +31,7 @@ export default (router, { User }) => {
         ctx.flash.set({ type: 'success', text: 'User has been created' });
         ctx.redirect('/users');
       } catch (e) {
+        console.log(e);
         ctx.response.status = 422;
         ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
         ctx.redirect('/users/new', { form: ctx.request.body, e });
