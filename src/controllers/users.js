@@ -28,11 +28,11 @@ export default (router, { User }) => {
       const user = await User.build({ firstName, lastName, email, password });
       try {
         await user.save();
-        ctx.flash.set('User has been created');
+        ctx.flash.set({ type: 'success', text: 'User has been created' });
         ctx.redirect('/users');
       } catch (e) {
         ctx.response.status = 422;
-        ctx.flash.set('Incorrect user data');
+        ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
         ctx.redirect('/users/new', { form: ctx.request.body, e });
       }
     })
@@ -43,12 +43,12 @@ export default (router, { User }) => {
 
       try {
         await user.update(updateValue, { where: { id: ctx.params.id } });
-        ctx.flash.set('User has been created');
-        ctx.redirect(`/users/${user.id}/edit`);
+        ctx.flash.set({ type: 'success', text: 'User has been updated' });
+        ctx.redirect('/users');
       } catch (e) {
         ctx.response.status = 422;
-        ctx.flash.set('Incorrect user data');
-        ctx.redirect('users/new', { form: ctx.request.body, e });
+        ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
+        ctx.redirect('/users/new', { form: ctx.request.body, e });
       }
     })
     .delete('/users/:id', async (ctx) => {

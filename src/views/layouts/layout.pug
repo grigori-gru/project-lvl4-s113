@@ -20,5 +20,6 @@ html(lang="en")
     .container
       - const msg = flash.get()
       if msg
-        .alert.alert-info.m-3= msg
+        .alert(class=`alert-${msg.type}`)
+          = msg.text
       block content

@@ -1,4 +1,4 @@
-import getUser from './user.db';
+import getUser from './user';
 
 export default content => ({
   User: getUser(content),
