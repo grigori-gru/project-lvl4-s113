@@ -1,7 +1,12 @@
 extends ../layouts/layout.pug
 
 block content
-  h3= user.firstName 
-  = user.lastName
-  h2= user.email
-  = user.password
+  table.table
+    tr
+      th FirstName
+      th LastName
+      th Email
+    tr
+      td= user.firstName
+      td= user.lastName
+      td= user.email
