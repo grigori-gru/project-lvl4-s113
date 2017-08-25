@@ -1,3 +1,7 @@
+import debug from 'debug';
+
+const logger = debug('app');
+
 export default (router, { User }) => {
   router
     .get('/', async (ctx) => {
@@ -24,35 +28,44 @@ export default (router, { User }) => {
     })
     .post('/users', async (ctx) => {
       const { firstName, lastName, email, password } = ctx.request.body;
+      logger('POST request');
 
-      const user = await User.build({ firstName, lastName, email, password });
       try {
+        const user = await User.build({ firstName, lastName, email, password });
         await user.save();
+        // logger(user.dataValues.id);
+        logger('POST request done');
         ctx.flash.set({ type: 'success', text: 'User has been created' });
-        ctx.redirect('/users');
+        ctx.redirect(`/users/${user.dataValues.id}`);
       } catch (e) {
-        console.log(e);
-        ctx.response.status = 422;
+        // console.log(e);
+        logger('POST request error');
+        // logger(`${ctx.response.status}`);
         ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
         ctx.redirect('/users/new', { form: ctx.request.body, e });
+        ctx.response.status = 422;
       }
     })
     .patch('/users/:id', async (ctx) => {
       const { firstName, lastName, email, password } = ctx.request.body;
       const updateValue = { firstName, lastName, email, password };
-      const user = await User.findById(ctx.params.id);
+      logger('PATCH');
 
       try {
+        const user = await User.findById(ctx.params.id);
         await user.update(updateValue, { where: { id: ctx.params.id } });
+        logger('PATCH done');
         ctx.flash.set({ type: 'success', text: 'User has been updated' });
         ctx.redirect('/users');
       } catch (e) {
-        ctx.response.status = 422;
+        logger('PATCH error');
         ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
         ctx.redirect('/users/new', { form: ctx.request.body, e });
+        ctx.response.status = 422;
       }
     })
     .delete('/users/:id', async (ctx) => {
+      logger('DELETE');
       await User.destroy({
         where: {
           id: ctx.params.id,

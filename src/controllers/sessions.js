@@ -1,4 +1,8 @@
+import debug from 'debug';
+
 import encrypt from '../lib/encrypt';
+
+const logger = debug('app');
 
 export default (router, { User }) => {
   router
@@ -12,16 +16,18 @@ export default (router, { User }) => {
           email,
         },
       });
-
       if (user && user.passwordDigest === encrypt(password)) {
+        logger('POST /sessions true');
         ctx.flash.set({ type: 'success', text: 'It\'s ok!!! Session start' });
         ctx.session.id = user.id;
-        await ctx.redirect('/');
+        ctx.redirect('/');
         return;
       }
 
+      logger('POST /sessions false');
       ctx.flash.set({ type: 'danger', text: 'Email or password were wrong!' });
-      await ctx.redirect('sessions/new', { form: ctx.request.body });
+      ctx.redirect('sessions/new');
+      ctx.response.status = 422;
     })
     .delete('/sessions', async (ctx) => {
       delete ctx.session.id;

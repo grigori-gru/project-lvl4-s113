@@ -1,24 +1,36 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
+import faker from 'faker';
 
 import app from '../src';
 
 describe('requests', () => {
   let server;
+  let body;
 
   beforeAll(() => {
     jasmine.addMatchers(matchers);
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    body = {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
     server = app().listen();
+    await request(server)
+      .post('/users')
+      .type('form')
+      .send(body);
   });
 
   it('POST /sessions', async () => {
     const res = await request(server)
       .post('/sessions')
       .type('form')
-      .send({ email: 'email@mail.ru', password: 'qwerty' });
+      .send({ email: body.email, password: body.password });
     expect(res).toHaveHTTPStatus(302);
   });
 
@@ -35,7 +47,7 @@ describe('requests', () => {
     const authRes = await request(server)
       .post('/sessions')
       .type('form')
-      .send({ email: 'email@mail.ru', password: 'qwerty' });
+      .send({ email: body.email, password: body.password });
     expect(authRes).toHaveHTTPStatus(302);
     const cookie = authRes.headers['set-cookie'];
 

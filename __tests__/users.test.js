@@ -1,5 +1,6 @@
 import request from 'supertest'; // eslint-disable-line
 import matchers from 'jest-supertest-matchers'; // eslint-disable-line
+import faker from 'faker';
 // import SequelizeMock from 'sequelize-mock';
 
 import app from '../src';
@@ -8,6 +9,8 @@ import app from '../src';
 
 describe('requests', () => {
   let server;
+  let body;
+  let body1;
   // let userMock;
   beforeAll(() => {
     jasmine.addMatchers(matchers);
@@ -20,22 +23,22 @@ describe('requests', () => {
     //   email: 'email@mail.ru',
     //   password: 'qwerty',
     // });
+    body = {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
+    body1 = {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
     server = app().listen();
   });
 
-  const body = {
-    firstName: 'firstName',
-    lastName: 'lastName',
-    email: 'newemail@mail.ru',
-    password: 'password',
-  };
-
-  const body1 = {
-    firstName: 'firstName1',
-    lastName: 'lastName2',
-    email: 'newemail1@mail.ru',
-    password: 'password2',
-  };
 
   it('GET /', async () => {
     const res = await request(server)
@@ -115,7 +118,7 @@ describe('requests', () => {
       .type('form')
       .send(body);
     expect(res1).toHaveHTTPStatus(302);
-    const url = res1.headers.location.split('/').join('/');
+    const url = res1.headers.location;
     const res2 = await request(server)
       .delete(url);
     expect(res2).toHaveHTTPStatus(302);
