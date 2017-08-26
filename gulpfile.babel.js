@@ -18,7 +18,7 @@ gulp.task('console', () => {
   });
 });
 
-gulp.task('db init', async () => {
+gulp.task('init', async () => {
   await init();
   console.log('db created');
 });
