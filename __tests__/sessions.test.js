@@ -3,13 +3,15 @@ import matchers from 'jest-supertest-matchers';
 import faker from 'faker';
 
 import app from '../src';
+import init from '../src/init';
 
 describe('requests', () => {
   let server;
   let body;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     jasmine.addMatchers(matchers);
+    await init();
   });
 
   beforeEach(async () => {
@@ -56,4 +58,15 @@ describe('requests', () => {
       .set('Cookie', cookie);
     expect(res).toHaveHTTPStatus(302);
   });
+
+  afterEach((done) => {
+    server.close();
+    done();
+  });
+
+  // afterAll(async (done) => {
+  //   await init(true);
+  //   console.log('db reset');
+  //   done();
+  // });
 });

@@ -4,22 +4,25 @@ html(lang="en")
     title= Title
     script(src='/assets/application.js')
   body
-    nav.navbar.navbar-light.bg-faded
+    nav.navbar.navbar-toggleable-md.navbar-inverse.bg-inverse
+      //- button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
       a.navbar-brand(href="/") Main Page
-      ul.nav.navbar-nav.float-xs-right
-      li.nav-item
-        a.nav-link(href="/users") Users
-      if isSignedIn()
-        form.form-inline.float-xs-right(action='/sessions?_method=DELETE' method='post')
-          button.btn.btn-link(type='submit') Sign out
-      else
-        li.nav-item
-          a.nav-link(href="/sessions/new") Sign in
+      navbarNav.collapse.navbar-collapse
+        ul.nav.navbar-nav
           li.nav-item
-            a.nav-link(href="/users/new") Sign up
-    .container
-      - const msg = flash.get()
-      if msg
-        .alert(class=`alert-${msg.type}`)
-          = msg.text
-      block content
+            a.nav-link(href="/users") Users
+          if isSignedIn()
+            form.form-inline.float-xs-right(action='/sessions?_method=DELETE' method='post')
+              button.btn.btn-link(type='submit') Sign out
+          else
+            li.nav-item
+              a.nav-link(href="/sessions/new") Sign in
+            li.nav-item
+              a.nav-link(href="/users/new") Sign up
+  .container
+    - const msg = flash.get()
+    if msg
+      .alert(class=`alert-${msg.type}`)
+        = msg.text
+    block content

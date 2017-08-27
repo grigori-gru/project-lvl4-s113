@@ -33,14 +33,11 @@ export default (router, { User }) => {
       try {
         const user = await User.build({ firstName, lastName, email, password });
         await user.save();
-        // logger(user.dataValues.id);
         logger('POST request done');
         ctx.flash.set({ type: 'success', text: 'User has been created' });
         ctx.redirect(`/users/${user.dataValues.id}`);
       } catch (e) {
-        // console.log(e);
         logger('POST request error');
-        // logger(`${ctx.response.status}`);
         ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
         ctx.redirect('/users/new', { form: ctx.request.body, e });
         ctx.response.status = 422;

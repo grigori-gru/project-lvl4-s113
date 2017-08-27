@@ -1,28 +1,20 @@
-import request from 'supertest'; // eslint-disable-line
-import matchers from 'jest-supertest-matchers'; // eslint-disable-line
+import request from 'supertest';
+import matchers from 'jest-supertest-matchers';
 import faker from 'faker';
-// import SequelizeMock from 'sequelize-mock';
 
+import init from '../src/init';
 import app from '../src';
-
-// const dbMock = new SequelizeMock();
 
 describe('requests', () => {
   let server;
   let body;
   let body1;
-  // let userMock;
-  beforeAll(() => {
+  beforeAll(async () => {
     jasmine.addMatchers(matchers);
+    await init(true);
   });
 
   beforeEach(() => {
-    // userMock = dbMock.define('user', {
-    //   firstName: 'firstName',
-    //   lastName: 'lastName',
-    //   email: 'email@mail.ru',
-    //   password: 'qwerty',
-    // });
     body = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
@@ -43,7 +35,6 @@ describe('requests', () => {
   it('GET /', async () => {
     const res = await request(server)
       .get('/');
-    // console.log(userMock);
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -128,4 +119,10 @@ describe('requests', () => {
     server.close();
     done();
   });
+
+  // afterAll(async (done) => {
+  //   await init(true);
+  //   console.log('db reset');
+  //   done();
+  // });
 });

@@ -1,7 +1,7 @@
 import getModels from './models';
 import connect from './db';
 
-export default async () => {
+export default async (isTrue) => {
   const models = getModels(connect);
-  await Promise.all(Object.values(models).map(model => model.sync()));
+  await Promise.all(Object.values(models).map(model => model.sync({ force: isTrue })));
 };
