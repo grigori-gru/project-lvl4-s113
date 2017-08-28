@@ -11,8 +11,9 @@ block content
             td
               a(href=`/users/${user.id}`)= user.firstName
             td
-              a(href=`/users/${user.id}/edit`) Edit
-              form.form-inline.d-inline-block(action=`/users/${user.id}?_method=DELETE` method='post')
-                button.btn-link(type='submit') Delete
+              if signedId == user.id 
+                a(href=`/users/${user.id}/edit`) Edit
+                form(data-confirm=`Are you sure you want to delete ${user.firstName}?`).form-inline.d-inline-block(action=`/users/${user.id}?_method=DELETE` method='post')
+                  button.btn-link(type='submit') Delete
   else
     p No any user...

@@ -26,7 +26,7 @@ export default (router, { User }) => {
 
       logger('POST /sessions false');
       ctx.flash.set({ type: 'danger', text: 'Email or password were wrong!' });
-      ctx.redirect('sessions/new');
+      ctx.redirect('/sessions/new');
       ctx.response.status = 422;
     })
     .delete('/sessions', async (ctx) => {

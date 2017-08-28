@@ -3,24 +3,24 @@
     label.col-form-label
       | FirstName
       sup *
-    input.form-control(name='firstName' value=form.firstName)
+    input.form-control(name='firstName' value=form.firstName placeholder='yourfirstName')
 .row.form-group
   .col-sm
     label.col-form-label
       | LastName
       sup *
-    textarea.form-control(name='lastName' value=form.lastName)
+    input.form-control(name='lastName' value=form.lastName placeholder='yourlastName')
 .row.form-group
   .col-sm
     label.col-form-label
       | Email
       sup *
-    textarea.form-control(name='email' value=form.email)
+    input.form-control(name='email' value=form.email placeholder='youremail@mail.com')
 .row.form-group
   .col-sm
     label.col-form-label
       | Password
       sup *
-    textarea.form-control(name='password' value=form.password)
+    input.form-control(name='password' value=form.password placeholder='password')
 .form-group
   button.btn.btn-primary.btn-block(type='submit') Save

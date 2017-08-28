@@ -2,6 +2,7 @@ doctype html
 html(lang="en")
   head
     title= Title
+    script(src='/assets/vendor.js')
     script(src='/assets/application.js')
   body
     nav.navbar.navbar-toggleable-md.navbar-inverse.bg-inverse
@@ -12,7 +13,7 @@ html(lang="en")
         ul.nav.navbar-nav
           li.nav-item
             a.nav-link(href="/users") Users
-          if isSignedIn()
+          if signedId
             form.form-inline.float-xs-right(action='/sessions?_method=DELETE' method='post')
               button.btn.btn-link(type='submit') Sign out
           else

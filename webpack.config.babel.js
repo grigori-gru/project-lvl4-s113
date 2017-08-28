@@ -2,7 +2,10 @@ import path from 'path';
 import webpack from 'webpack';
 
 export default () => ({
-  entry: './client',
+  entry: {
+    app: ['./client'],
+    vendor: ['babel-polyfill', 'jquery', 'jquery-ujs', 'bootstrap'],
+  },
   output: {
     filename: 'application.js',
     path: path.resolve(__dirname, 'dist', 'assets'),
@@ -30,6 +33,11 @@ export default () => ({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.js',
+      minChunks: Infinity,
     }),
   ],
 });

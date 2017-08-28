@@ -27,7 +27,7 @@ export default () => {
   app.use(async (ctx, next) => {
     ctx.state = {
       flash: ctx.flash,
-      isSignedIn: () => ctx.session.id !== undefined,
+      signedId: ctx.session.id || false,
     };
     await next();
   });

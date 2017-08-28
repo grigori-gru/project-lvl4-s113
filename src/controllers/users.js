@@ -8,6 +8,7 @@ export default (router, { User }) => {
       await ctx.render('index');
     })
     .get('/users', async (ctx) => {
+      logger('/users page');
       const users = await User.findAll();
       ctx.render('users/index', { users });
     })
@@ -68,6 +69,7 @@ export default (router, { User }) => {
           id: ctx.params.id,
         },
       });
+      ctx.session.id = undefined;
       ctx.redirect('/users');
     });
 };
