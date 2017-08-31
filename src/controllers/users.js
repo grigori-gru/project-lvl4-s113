@@ -77,7 +77,7 @@ export default (router, { User }) => {
         },
       });
       ctx.session = {};
-      ctx.flash.set('User deleted');
+      ctx.flash.set({ type: 'success', text: 'User deleted' });
       ctx.redirect(router.url('users'));
     });
 };
