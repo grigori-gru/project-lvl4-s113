@@ -14,7 +14,7 @@ block content
               if signedId == user.id 
                 a.btn.btn-link.active(href=urlFor('usersIdEdit', user.id)) Edit
                 +formFor(user, { url: urlFor('usersDelete', user.id), method: 'delete', confirm: `Are you sure you want to delete ${user.firstName}?`})
-                button.btn.btn-link(type='submit')= 'Delete'
+                  button.btn.btn-link(type='submit')= 'Delete'
               else    
                 button.btn.btn-link(type='button', disabled='') Edit
                 button.btn.btn-link(type='button', disabled='') Delete
