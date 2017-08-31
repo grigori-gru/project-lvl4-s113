@@ -3,6 +3,12 @@ extends ../layouts/layout.pug
 block content
   .row.mt-3
     .col-sm-6.mx-auto
-      h3.text-xs-center New user
-      form(action='/tasks' method='post')
-        include _form.pug
+      h3.text-xs-center New task
+      +formFor(f, { url: urlFor('tasks'), method: 'post' })
+        +input(f, 'name')
+        +input(f, 'description')
+        +input(f, 'status')
+        +input(f, 'creator')
+        +input(f, 'assignedTo')
+        +input(f, 'tags')
+        +button(f)

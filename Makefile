@@ -14,5 +14,8 @@ test:
 testwatch:
 			npm run testwatch
 
+testtasks:
+			npm run test __tests__/tasks.test.js
+
 db:
 			npm run babel-node -- src/db/db.js

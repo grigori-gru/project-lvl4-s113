@@ -1,89 +1,78 @@
 import debug from 'debug';
 
+import buildFormObj from '../lib/formObjectBuilder';
+
 const logger = debug('app');
 
 export default (router, { Task }) => {
   router
-    .get('/tasks', async (ctx) => {
-      logger('/tasks start');
+    .get('tasks', '/tasks', async (ctx) => {
+      logger('GET tasks start');
       const tasks = await Task.findAll();
       ctx.render('tasks/index', { tasks });
     })
-    .get('/tasks/new', (ctx) => {
-      ctx.render('tasks/new', { form: {}, errors: {} });
+
+    .get('newTask', '/tasks/new', (ctx) => {
+      const task = Task.build();
+      ctx.render('tasks/new', { f: buildFormObj(task) });
     })
-    .get('/tasks/:id', async (ctx) => {
+
+    .get('tasksShow', '/tasks/:id', async (ctx) => {
+      logger('tasksShow:', ctx.params.id);
       const task = await Task
-        .findById(ctx.params.id)
-        .then(result => result.dataValues);
+        .findById(ctx.params.id);
       ctx.render('tasks/show', { task });
     })
-    .get('/tasks/:id/edit', async (ctx) => {
+
+    .get('tasksIdEdit', '/tasks/:id/edit', async (ctx) => {
+      logger('tasksIdEdit:', ctx.params.id);
       const task = await Task
-        .findById(ctx.params.id)
-        .then(result => result.dataValues);
-      ctx.render('tasks/edit', { task, form: task, errors: {} });
+        .findById(ctx.params.id);
+      ctx.render('tasks/edit', { f: buildFormObj(task) });
     })
-    .post('/tasks', async (ctx) => {
-      const { name, description, status, creator, assignedTo, tags } = ctx.request.body;
-      logger(`/tasks POST request name: ${name}`);
-      logger(ctx.request.body);
+
+    .post('tasks', '/tasks', async (ctx) => {
+      logger('tasks POST');
+      const form = ctx.request.body.form;
+      const task = await Task.build(form);
 
       try {
-        const task = await Task.build({ name, description, status, creator, assignedTo, tags });
         await task.save();
-        logger('/tasks POST request done');
+        logger('tasks POST done');
         ctx.flash.set({ type: 'success', text: 'Task has been created' });
-        ctx.redirect(`/tasks/${task.dataValues.id}`);
+        ctx.redirect(router.url('tasksShow', task.dataValues.id));
       } catch (e) {
-        logger('/tasks POST request error', e);
-        const erMessages = e.errors
-          .reduce((acc, value) => {
-            logger(value.message);
-            return [...acc, value.message];
-          }, [])
-          .join('\n');
-        const text = `Incorrect task data: ${erMessages}`;
-        ctx.flash.set({ type: 'danger', text });
-        ctx.redirect('/tasks/new', { form: ctx.request.body, e });
+        logger('tasks POST error', e);
+        ctx.render('users/new', { f: buildFormObj(task, e) });
         ctx.response.status = 422;
       }
     })
-    .patch('/tasks/:id', async (ctx) => {
-      const { name, description, status, creator, assignedTo, tags } = ctx.request.body;
-      const updateValues = { name, description, status, creator, assignedTo, tags };
-      // const updateValue = { firstName, lastName, email, password };
-      logger(`/tasks PATCH request name: ${ctx.request.body.name}`);
+
+    .patch('tasksPatch', '/tasks/:id', async (ctx) => {
+      logger('tasks PATCH');
+      const form = ctx.request.body.form;
+      const task = await Task.findById(ctx.params.id);
 
       try {
-        const task = await Task.findById(ctx.params.id);
-        logger('updateValues', updateValues);
-        await task.update(updateValues, { where: { id: ctx.params.id } });
-        logger(task.dataValues);
-        logger('/tasks PATCH done');
+        await task.update(form, { where: { id: ctx.params.id } });
+        logger('tasks PATCH done');
         ctx.flash.set({ type: 'success', text: 'Task has been updated' });
-        ctx.redirect('/tasks');
+        ctx.redirect(router.url('usersShow', task.dataValues.id));
       } catch (e) {
-        logger('/tasks PATCH error', e.name);
-        const erMessages = e.errors
-          .reduce((acc, value) => {
-            logger(value.message);
-            return [...acc, value.message];
-          }, [])
-          .join(' ');
-        const text = `Incorrect task data. ${erMessages}`;
-        ctx.flash.set({ type: 'danger', text });
-        ctx.redirect('/tasks/new', { form: ctx.request.body, e });
+        logger('tasks PATCH error', e);
+        ctx.render('users/edit', { f: buildFormObj(task, e) });
         ctx.response.status = 422;
       }
     })
-    .delete('/tasks/:id', async (ctx) => {
-      logger('DELETE');
+
+    .delete('tasksDelete', '/tasks/:id', async (ctx) => {
+      logger('task DELETE');
       await Task.destroy({
         where: {
           id: ctx.params.id,
         },
       });
-      ctx.redirect('/tasks');
+      ctx.flash.set({ type: 'success', text: 'Task deleted' });
+      ctx.redirect(router.url('tasks'));
     });
 };
