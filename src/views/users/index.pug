@@ -12,7 +12,8 @@ block content
               a(href=`/users/${user.id}`)= user.firstName
             td
               if signedId == user.id 
-                a.btn.btn-link.active(href=urlFor('usersIdEdit', user.id)) Edit
+                +formFor(user, { url: urlFor('usersIdEdit', user.id), confirm: `Are you sure you want to edit ${user.firstName}?`})
+                  button.btn.btn-link(type='submit')= 'Edit'
                 +formFor(user, { url: urlFor('usersDelete', user.id), method: 'delete', confirm: `Are you sure you want to delete ${user.firstName}?`})
                   button.btn.btn-link(type='submit')= 'Delete'
               else    
