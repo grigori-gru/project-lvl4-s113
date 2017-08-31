@@ -2,7 +2,7 @@ extends ../layouts/layout.pug
 
 block content
   if users.length > 0
-      table.table
+      table.table.table-info
         tr
           th FirstName
           th Actions
@@ -12,8 +12,11 @@ block content
               a(href=`/users/${user.id}`)= user.firstName
             td
               if signedId == user.id 
-                a(href=`/users/${user.id}/edit`) Edit
-                form(data-confirm=`Are you sure you want to delete ${user.firstName}?`).form-inline.d-inline-block(action=`/users/${user.id}?_method=DELETE` method='post')
-                  button.btn-link(type='submit') Delete
+                a.btn.btn-link.active(href=urlFor('usersIdEdit', user.id)) Edit
+                +formFor(user, { url: urlFor('usersDelete', user.id), method: 'delete', confirm: `Are you sure you want to delete ${user.firstName}?`})
+                button.btn.btn-link(type='submit')= 'Delete'
+              else    
+                button.btn.btn-link(type='button', disabled='') Edit
+                button.btn.btn-link(type='button', disabled='') Delete
   else
     p No any user...

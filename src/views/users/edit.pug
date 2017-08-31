@@ -2,7 +2,11 @@ extends ../layouts/layout.pug
 
 block content
   .row.mt-3
-     .col-sm-6.mx-auto
-       h3.text-xs-center Edit '#{user.firstName}'
-       form(action=`/users/${user.id}?_method=PATCH` method='post')
-         include _form.pug
+    .col-sm-6.mx-auto
+      h3.text-xs-center Edit
+      +formFor(f, { url: urlFor('usersPatch', f.object.id), method: 'patch' })
+        +input(f, 'email')
+        +input(f, 'firstName')
+        +input(f, 'lastName')
+        +input(f, 'password', { as: 'password' })
+        +button(f, 'submit', 'Update')

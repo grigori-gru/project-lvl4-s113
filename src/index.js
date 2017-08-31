@@ -11,6 +11,8 @@ import Pug from 'koa-pug';
 import methodOverride from 'koa-methodoverride';
 import session from 'koa-generic-session';
 import flash from 'koa-flash-simple';
+import koaLogger from 'koa-logger';
+import _ from 'lodash';
 
 import getWebpackConfig from '../webpack.config.babel';
 import getRoutes from './controllers';
@@ -32,7 +34,13 @@ export default () => {
     await next();
   });
   app.use(bodyParser());
-  app.use(methodOverride('_method'));
+  app.use(methodOverride((req) => {
+    // return req?.body?._method;
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+      return req.body._method; // eslint-disable-line
+    }
+    return null;
+  }));
 
   if (process.env.NODE_ENV !== 'test') {
     app.use(middleware({
@@ -40,10 +48,20 @@ export default () => {
     }));
   }
 
+  app.use(koaLogger());
   const router = new Router();
 
   const pug = new Pug({
     viewPath: path.join(__dirname, './views'),
+    debug: true,
+    pretty: true,
+    compileDebug: true,
+    locals: [],
+    basedir: path.join(__dirname, 'views'),
+    helperPath: [
+      { _ },
+      { urlFor: (...args) => router.url(...args) },
+    ],
   });
 
   pug.use(app);

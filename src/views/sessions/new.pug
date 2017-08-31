@@ -1,15 +1,11 @@
 extends ../layouts/layout.pug
 
 block content
-  .row.text-xs-center.mt-3
-      .col-sm-4.mx-auto
-        h3 Login form
-        form(action='/sessions' method='post')
-          .row.form-group
-            .col-sm
-              input.form-control(name='email' placeholder='Email' value=form.email)
-          .row.form-group
-            .col-sm
-              input.form-control(name='password' type='password' placeholder='Password')
-          .form-group
-            button.btn.btn-primary.btn-block(type='submit') Log in
+  .row.mt-3
+    .col-sm-6.mx-auto
+      h3.text-xs-center Sign in
+      +formFor(f, { url: urlFor('sessions'), method: 'post' })
+        +input(f, 'email')
+        +input(f, 'password', { as: 'password' })
+        +button(f)
+    

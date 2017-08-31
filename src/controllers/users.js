@@ -1,75 +1,83 @@
 import debug from 'debug';
 
+import buildFormObj from '../lib/formObjectBuilder';
+
 const logger = debug('app');
 
 export default (router, { User }) => {
   router
-    .get('/', async (ctx) => {
+    .get('root', '/', async (ctx) => {
       await ctx.render('index');
     })
-    .get('/users', async (ctx) => {
+
+    .get('users', '/users', async (ctx) => {
       logger('/users page');
       const users = await User.findAll();
       ctx.render('users/index', { users });
     })
-    .get('/users/new', (ctx) => {
-      ctx.render('users/new', { form: {}, errors: {} });
+
+    .get('newUser', '/users/new', (ctx) => {
+      const user = User.build();
+      ctx.render('users/new', { f: buildFormObj(user) });
     })
-    .get('/users/:id', async (ctx) => {
+
+    .get('usersShow', '/users/:id', async (ctx) => {
+      logger('usersShow:', ctx.params.id);
       const user = await User
-        .findById(ctx.params.id)
-        .then(result => result.dataValues);
+        .findById(ctx.params.id);
       ctx.render('users/show', { user });
     })
-    .get('/users/:id/edit', async (ctx) => {
+
+    .get('usersIdEdit', '/users/:id/edit', async (ctx) => {
+      logger('usersIdEdit:', ctx.params.id);
       const user = await User
-        .findById(ctx.params.id)
-        .then(result => result.dataValues);
-      ctx.render('users/edit', { user, form: user, errors: {} });
+        .findById(ctx.params.id);
+      ctx.render('users/edit', { f: buildFormObj(user) });
     })
-    .post('/users', async (ctx) => {
-      const { firstName, lastName, email, password } = ctx.request.body;
-      logger('POST request');
+
+    .post('users', '/users', async (ctx) => {
+      logger('users POST');
+      const form = ctx.request.body.form;
+      const user = await User.build(form);
 
       try {
-        const user = await User.build({ firstName, lastName, email, password });
         await user.save();
-        logger('POST request done');
+        logger('users POST done');
         ctx.flash.set({ type: 'success', text: 'User has been created' });
-        ctx.redirect(`/users/${user.dataValues.id}`);
+        ctx.redirect(router.url('usersShow', user.dataValues.id));
       } catch (e) {
-        logger('POST request error');
-        ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
-        ctx.redirect('/users/new', { form: ctx.request.body, e });
+        logger('users POST error', e);
+        ctx.render('users/new', { f: buildFormObj(user, e) });
         ctx.response.status = 422;
       }
     })
-    .patch('/users/:id', async (ctx) => {
-      const { firstName, lastName, email, password } = ctx.request.body;
-      const updateValue = { firstName, lastName, email, password };
-      logger('PATCH');
+
+    .patch('usersPatch', '/users/:id', async (ctx) => {
+      logger('Patch start');
+      const form = ctx.request.body.form;
+      const user = await User.findById(ctx.params.id);
 
       try {
-        const user = await User.findById(ctx.params.id);
-        await user.update(updateValue, { where: { id: ctx.params.id } });
-        logger('PATCH done');
+        await user.update(form, { where: { id: ctx.params.id } });
+        logger('users PATCH done');
         ctx.flash.set({ type: 'success', text: 'User has been updated' });
-        ctx.redirect('/users');
+        ctx.redirect(router.url('usersShow', user.dataValues.id));
       } catch (e) {
-        logger('PATCH error');
-        ctx.flash.set({ type: 'danger', text: 'Incorrect user data' });
-        ctx.redirect('/users/new', { form: ctx.request.body, e });
+        logger('users PATCH error', e);
+        ctx.render('users/edit', { f: buildFormObj(user, e) });
         ctx.response.status = 422;
       }
     })
-    .delete('/users/:id', async (ctx) => {
-      logger('DELETE');
+
+    .delete('usersDelete', '/users/:id', async (ctx) => {
+      logger('users DELETE');
       await User.destroy({
         where: {
           id: ctx.params.id,
         },
       });
-      ctx.session.id = undefined;
-      ctx.redirect('/users');
+      ctx.session = {};
+      ctx.flash.set('User deleted');
+      ctx.redirect(router.url('users'));
     });
 };

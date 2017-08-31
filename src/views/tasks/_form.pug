@@ -1,0 +1,46 @@
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | Task name
+      sup *
+    input.form-control(name='name' value=form.name placeholder='your_task_name')
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | Description
+    input.form-control(name='description' value=form.description placeholder='description')
+.fieldset.form-group
+  legend Task status
+  .form-check
+    label.form-check-label
+      input.form-check-input(type='radio', name='optionsRadios', value=form.status, checked='')
+      |         New
+  .form-check
+    label.form-check-label
+      input.form-check-input(type='radio', name='optionsRadios', value=form.status)
+      |         On the go
+  .form-check
+    label.form-check-label
+      input.form-check-input(type='radio', name='optionsRadios', value=form.status)
+      |         Testing
+  .form-check
+    label.form-check-label
+      input.form-check-input(type='radio', name='optionsRadios', value=form.status)
+      |         Done
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | Task creator
+    input.form-control(name='creator' value=form.creator placeholder='creator')
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | AssignedTo
+    input.form-control(name='assignedTo' value=form.assignedTo placeholder='assignedTo')
+.row.form-group
+  .col-sm
+    label.col-form-label
+      | Tags
+    input.form-control(name='tags' value=form.tags placeholder='tags')
+.form-group
+  button.btn.btn-primary.btn-block(type='submit') Save

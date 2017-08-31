@@ -1,16 +1,21 @@
 import debug from 'debug';
 
+import renderFlash from '../lib/renderFlash';
+import buildFormObj from '../lib/formObjectBuilder';
+
 import encrypt from '../lib/encrypt';
 
 const logger = debug('app');
 
 export default (router, { User }) => {
   router
-    .get('/sessions/new', async (ctx) => {
-      await ctx.render('sessions/new', { form: {} });
+    .get('newSessions', '/sessions/new', async (ctx) => {
+      await ctx.render('sessions/new', { f: buildFormObj({}) });
     })
-    .post('/sessions', async (ctx) => {
-      const { email, password } = ctx.request.body;
+    .post('sessions', '/sessions', async (ctx) => {
+      logger('POST sessions start');
+      const { email, password } = ctx.request.body.form;
+      logger('POST seesion body', ctx.request.body);
       const user = await User.findOne({
         where: {
           email,
@@ -18,19 +23,21 @@ export default (router, { User }) => {
       });
       if (user && user.passwordDigest === encrypt(password)) {
         logger('POST /sessions true');
-        ctx.flash.set({ type: 'success', text: 'It\'s ok!!! Session start' });
+        ctx.flash.set({ type: 'success', text: 'It\'s ok!!! Session is open' });
         ctx.session.id = user.id;
-        ctx.redirect('/');
+        ctx.redirect(router.url('root'));
         return;
       }
 
       logger('POST /sessions false');
-      ctx.flash.set({ type: 'danger', text: 'Email or password were wrong!' });
-      ctx.redirect('/sessions/new');
+      ctx.state.flash = renderFlash('Email or password were wrong!');
+      ctx.render('sessions/new', { f: buildFormObj({ email }) });
       ctx.response.status = 422;
     })
-    .delete('/sessions', async (ctx) => {
-      delete ctx.session.id;
-      await ctx.redirect('/');
+    .delete('sessions', '/sessions', (ctx) => {
+      logger('DELETE /sessions');
+      ctx.session = {};
+      ctx.flash.set({ type: 'success', text: 'Session is closed' });
+      ctx.redirect(router.url('root'));
     });
 };

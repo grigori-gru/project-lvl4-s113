@@ -4,5 +4,9 @@ block content
   .row.mt-3
     .col-sm-6.mx-auto
       h3.text-xs-center New user
-      form(action='/users' method='post')
-        include _form.pug
+      +formFor(f, { url: urlFor('users'), method: 'post' })
+        +input(f, 'email')
+        +input(f, 'firstName')
+        +input(f, 'lastName')
+        +input(f, 'password', { as: 'password' })
+        +button(f)

@@ -1,0 +1,18 @@
+extends ../layouts/layout.pug
+
+block content
+  table.table
+    tr
+      th Name
+      th Description
+      th Status
+      th Creator
+      th AssignedTo
+      th Tags
+    tr
+      td= task.name
+      td= task.description
+      td= task.status
+      td= task.creator
+      td= task.assignedTo
+      td= task.tags
