@@ -4,7 +4,7 @@ import buildFormObj from '../lib/formObjectBuilder';
 
 const logger = debug('app');
 
-export default (router, { Task }) => {
+export default (router, { Task, User }) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
       logger('GET tasks start');
@@ -12,9 +12,13 @@ export default (router, { Task }) => {
       ctx.render('tasks/index', { tasks });
     })
 
-    .get('newTask', '/tasks/new', (ctx) => {
+    .get('newTask', '/tasks/new', async (ctx) => {
+      logger('newTask start');
       const task = Task.build();
-      ctx.render('tasks/new', { f: buildFormObj(task) });
+      const users = await User.findAll().map(item => item.email);
+      logger(users);
+      // const formUsers
+      ctx.render('tasks/new', { f: buildFormObj(task), users });
     })
 
     .get('tasksShow', '/tasks/:id', async (ctx) => {
@@ -28,12 +32,21 @@ export default (router, { Task }) => {
       logger('tasksIdEdit:', ctx.params.id);
       const task = await Task
         .findById(ctx.params.id);
-      ctx.render('tasks/edit', { f: buildFormObj(task) });
+      const users = await User.findAll().map(item => item.email);
+      ctx.render('tasks/edit', { f: buildFormObj(task), users });
     })
 
     .post('tasks', '/tasks', async (ctx) => {
       logger('tasks POST');
-      const form = ctx.request.body.form;
+      logger('ctx.session.id', ctx.session.id);
+      // logger(await User.findAll());
+      const user = await User.findById(ctx.session.id);
+      logger('user', user.dataValues);
+      const form = {
+        ...ctx.request.body.form,
+        creator: user.dataValues.email,
+      };
+      logger('form', form);
       const task = await Task.build(form);
 
       try {
@@ -43,14 +56,15 @@ export default (router, { Task }) => {
         ctx.redirect(router.url('tasksShow', task.dataValues.id));
       } catch (e) {
         logger('tasks POST error', e);
-        ctx.render('users/new', { f: buildFormObj(task, e) });
+        ctx.render('tasks/new', { f: buildFormObj(task, e) });
         ctx.response.status = 422;
       }
     })
 
-    .patch('tasksPatch', '/tasks/:id', async (ctx) => {
+    .patch('tasksEdit', '/tasks/:id', async (ctx) => {
       logger('tasks PATCH');
       const form = ctx.request.body.form;
+      logger('tasks PATCH form:', form);
       const task = await Task.findById(ctx.params.id);
 
       try {
@@ -65,7 +79,7 @@ export default (router, { Task }) => {
       }
     })
 
-    .delete('tasksDelete', '/tasks/:id', async (ctx) => {
+    .delete('tasks', '/tasks/:id', async (ctx) => {
       logger('task DELETE');
       await Task.destroy({
         where: {

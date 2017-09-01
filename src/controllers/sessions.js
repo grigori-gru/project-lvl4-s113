@@ -25,6 +25,7 @@ export default (router, { User }) => {
         logger('POST /sessions true');
         ctx.flash.set({ type: 'success', text: 'It\'s ok!!! Session is open' });
         ctx.session.id = user.id;
+        ctx.session.email = user.email;
         ctx.redirect(router.url('root'));
         return;
       }

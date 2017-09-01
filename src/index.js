@@ -30,6 +30,7 @@ export default () => {
     ctx.state = {
       flash: ctx.flash,
       signedId: ctx.session.id || false,
+      signedEmail: ctx.session.email || false,
     };
     await next();
   });

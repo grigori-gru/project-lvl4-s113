@@ -6,9 +6,8 @@ block content
       h3.text-xs-center New task
       +formFor(f, { url: urlFor('tasks'), method: 'post' })
         +input(f, 'name')
-        +input(f, 'description')
-        +input(f, 'status')
-        +input(f, 'creator')
-        +input(f, 'assignedTo')
+        +textarea(f, 'description')
+        +select(f, 'status', ['New', 'On the go', 'Testing', 'Done'])
+        +select(f, 'assignedTo', users)
         +input(f, 'tags')
         +button(f)
