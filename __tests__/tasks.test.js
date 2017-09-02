@@ -25,7 +25,7 @@ describe('requests', () => {
         status: 'new',
         creator: faker.internet.email(),
         assignedTo: faker.internet.email(),
-        tags: faker.random.word(),
+        tags: 'one,two, three, four,   five ',
       },
     };
 
@@ -68,7 +68,7 @@ describe('requests', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('POST /tasks', async () => {
+  it('POST /tasks1', async () => {
     // console.log(cookie);
     const taskRes = await request(server)
       .post('/tasks')

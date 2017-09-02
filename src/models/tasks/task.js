@@ -27,7 +27,4 @@ export default connect => connect.define('task', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  tags: {
-    type: Sequelize.STRING,
-  },
 });

@@ -7,5 +7,6 @@ export default connect => connect.define('tag', {
     validate: {
       notEmpty: true,
     },
+    allowNull: false,
   },
 });

@@ -7,5 +7,6 @@ export default connect => connect.define('status', {
       notEmpty: true,
       isIn: [['new', 'on the go', 'testing', 'done']],
     },
+    allowNull: false,
   },
 });
