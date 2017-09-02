@@ -22,14 +22,13 @@ mixin button(f, value = 'Save', type = 'submit')
   .form-group
     input(class='btn' type=`${type}` value=`${value}`)
       
-mixin buttonLink(value, options = {}type = 'submit', disabled = false)
+mixin buttonLink(value, options = { type: 'submit', disabled: false })
   - const type = _.get(options, 'type') || 'submit';
   - const disabled = _.get(options, 'disabled');
-  .form-group
-    if disabled
-      button.btn.btn-link(type= type, disabled='', value= `${value}`)
-    else
-      button.btn.btn-link(type= type, value= `${value}`)
+  if disabled
+    button.btn.btn-link(type= `${type}`, disabled='', value= `${value}`)
+  else
+    button.btn.btn-link(type= `${type}`, value= `${value}`)
 
 mixin select(f, property, options)
   .form-group(class=(f.errors[property] && 'has-danger'))

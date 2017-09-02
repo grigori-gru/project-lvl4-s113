@@ -18,12 +18,13 @@ block content
                 //- button.btn.btn-link(type='button', disabled='')= task.name
               td
                 if signedEmail == task.creator 
-                  +formFor(task, { url: urlFor('tasksIdEdit', task.id), confirm: `Are you sure you want to edit ${task.name}?`})
-                    //- +buttonLink('Edit')
-                    button.btn.btn-link(type='submit')= 'Edit'
-                  +formFor(task, { url: urlFor('tasks', task.id), method: 'delete', confirm: `Are you sure you want to delete ${task.name}?`})
-                    //- +buttonLink('Delete')
-                    button.btn.btn-link(type='submit')= 'Delete'
+                  .btn-group
+                    +formFor(task, { url: urlFor('tasksIdEdit', task.id), confirm: `Are you sure you want to edit ${task.name}?`})
+                      button.btn.btn-link(type='submit')= 'Edit'
+                      //- +buttonLink('Edit')
+                    +formFor(task, { url: urlFor('tasksDelete', task.id), method: 'delete', confirm: `Are you sure you want to delete ${task.name}?`})
+                      button.btn.btn-link(type='submit')= 'Delete'
+                      //- +buttonLink('Delete')
                 else    
                   button.btn.btn-link(type='button', disabled='') Edit
                   button.btn.btn-link(type='button', disabled='') Delete

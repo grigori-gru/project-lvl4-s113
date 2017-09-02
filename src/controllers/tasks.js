@@ -127,7 +127,7 @@ export default (router, { Task, User, Tag }) => {
       }
     })
 
-    .delete('tasks', '/tasks/:id', async (ctx) => {
+    .delete('tasksDelete', '/tasks/:id', async (ctx) => {
       logger('task DELETE');
       await Task.destroy({
         where: {
