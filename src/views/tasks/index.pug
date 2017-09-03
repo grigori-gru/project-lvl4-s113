@@ -33,4 +33,5 @@ block content
   else
     .alert.alert-info(role='alert')
       | There is no any task...
-  a.btn.btn-primary.btn-lg.active(href='/tasks/new', role='button', aria-pressed='true') Create task
+    +formFor(task, { url: urlFor('tasksShow', task.id) })
+      button.btn.btn-primary.btn-lg(type='submit', aria-pressed='true') Create task

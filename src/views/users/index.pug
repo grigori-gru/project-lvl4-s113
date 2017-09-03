@@ -13,10 +13,11 @@ block content
                 button.btn.btn-link(type='submit')= user.firstName
             td
               if signedId == user.id 
-                +formFor(user, { url: urlFor('usersIdEdit', user.id), confirm: `Are you sure you want to edit ${user.firstName}?`})
-                  button.btn.btn-link(type='submit')= 'Edit'
-                +formFor(user, { url: urlFor('usersDelete', user.id), method: 'delete', confirm: `Are you sure you want to delete ${user.firstName}?`})
-                  button.btn.btn-link(type='submit')= 'Delete'
+                .btn-group
+                  +formFor(user, { url: urlFor('usersIdEdit', user.id), confirm: `Are you sure you want to edit ${user.firstName}?`})
+                    button.btn.btn-link(type='submit')= 'Edit'
+                  +formFor(user, { url: urlFor('usersDelete', user.id), method: 'delete', confirm: `Are you sure you want to delete ${user.firstName}?`})
+                    button.btn.btn-link(type='submit')= 'Delete'
               else    
                 button.btn.btn-link(type='button', disabled='') Edit
                 button.btn.btn-link(type='button', disabled='') Delete
