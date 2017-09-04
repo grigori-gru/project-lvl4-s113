@@ -1,6 +1,7 @@
 extends ../layouts/layout.pug
 
 block content
+  
   if tasks.length > 0
       table.table.table-info
         tr
@@ -33,5 +34,18 @@ block content
   else
     .alert.alert-info(role='alert')
       | There is no any task...
-    +formFor(task, { url: urlFor('tasksShow', task.id) })
-      button.btn.btn-primary.btn-lg(type='submit', aria-pressed='true') Create task
+  +formFor({}, { url: urlFor('newTask') })
+    button.btn.btn-primary(type='submit', aria-pressed='true') Create task
+
+  .container
+    .row
+      #filter-panel.collapse.filter-panel
+        .card.card-body
+          form.form-inline(action=urlFor('tasks'))
+            +searchSelect('Assigned to', 'assignedTo', users)
+            +searchSelect('Status', 'status', statuses)
+            +searchSelect('Tags', 'tag', tags)
+            +button(f)
+      button.btn.btn-primary(type='button', data-toggle='collapse', data-target='#filter-panel')
+        span.glyphicon.glyphicon-cog
+          |  Advanced Search

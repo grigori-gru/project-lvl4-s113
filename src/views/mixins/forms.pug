@@ -10,13 +10,16 @@ mixin formFor(f, options = {})
       input(name='_method' type='hidden' value= method)
     block
 
-mixin input(f, property, options = { as: 'text' })
+mixin input(f, property, options = { as: 'text', small: false })
   - const value = f.object[property] === undefined ? '' : f.object[property]
+  - const small = _.get(options, 'small');
   .form-group(class=(f.errors[property] && 'has-danger'))
     label= property
     input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`)
     if f.errors[property]
       .form-control-feedback= f.errors[property].map(({ message }) => message).join('. ')
+    if options.small 
+      small(class= 'form-text text-muted')= small
 
 mixin button(f, value = 'Save', type = 'submit')
   .form-group
@@ -46,3 +49,12 @@ mixin textarea(f, property)
     textarea(name=getInputName(f, property) class='form-control' rows='3')
     if f.errors[property]
       .form-control-feedback= f.errors[property].map(({ message }) => message).join('. ')
+
+mixin searchSelect(labelName, queryName, options)
+  .form-group
+    label(class='mr-sm-2')= labelName
+    select(name=queryName class='form-control mb-2 mr-sm-2 mb-sm-0')
+      if options
+        option(selected='selected')= 'none'
+        for option in options 
+          option= option

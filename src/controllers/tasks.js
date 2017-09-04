@@ -1,3 +1,4 @@
+import url from 'url';
 import debug from 'debug';
 
 import buildFormObj from '../lib/formObjectBuilder';
@@ -8,8 +9,29 @@ export default (router, { Task, User, Tag }) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
       logger('GET tasks start');
-      const tasks = await Task.findAll();
-      ctx.render('tasks/index', { tasks });
+      const { query } = url.parse(ctx.request.url, true);
+      logger('query', query);
+      const users = await User.findAll().map(item => item.email);
+      logger('users', users);
+      const tags = await Tag.findAll().map(item => item.name);
+      logger('tags', tags);
+      const statuses = ['New', 'On the go', 'Testing', 'Done'];
+      const findTasks = await Task.findAll({
+        where: {
+          assignedTo: query.assignedTo === 'none' ? users : query.assignedTo,
+          status: query.status === 'none' ? statuses : query.status,
+        },
+        include: [{
+          model: Tag,
+          where: { name: query.tag === 'none' ? tags : query.tag },
+        }],
+      });
+      logger('findAll:', await Task.findAll());
+      logger('findTasks:', findTasks);
+      const tasks = Object.keys(query).length > 0 ? findTasks : await Task.findAll();
+      ctx.render('tasks/index', {
+        statuses, tags, users, tasks,
+      });
     })
 
     .get('newTask', '/tasks/new', async (ctx) => {
@@ -78,23 +100,6 @@ export default (router, { Task, User, Tag }) => {
               });
           },
           ));
-
-          // await Promise.all(prepTags.map(async (item) => {
-          //   await Tag
-          //     .findOrBuild({
-          //       where: { name: item },
-          //       defaults: { name: item },
-          //     })
-          //     .spread((result, isBuild) => {
-          //       logger('result', result);
-          //       logger('isCreated', isBuild);
-          //       if (isBuild) result.save();
-          //     })
-          //     .catch((error) => {
-          //       logger('error', error);
-          //     });
-          // },
-          // ));
         }
 
         logger('TAG: ', await Tag.findAll().map(x => x.dataValues));

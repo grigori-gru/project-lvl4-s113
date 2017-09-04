@@ -9,5 +9,5 @@ block content
         +textarea(f, 'description')
         +select(f, 'status', ['New', 'On the go', 'Testing', 'Done'])
         +select(f, 'assignedTo', users)
-        +input(f, 'tags')
+        +input(f, 'tags', { small: 'Enter a comma separated list of tags' })
         +button(f)
