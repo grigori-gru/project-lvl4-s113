@@ -1,4 +1,3 @@
-import url from 'url';
 import debug from 'debug';
 
 import buildFormObj from '../lib/formObjectBuilder';
@@ -9,8 +8,9 @@ export default (router, { Task, User, Tag }) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
       logger('GET tasks start');
-      const { query } = url.parse(ctx.request.url, true);
-      logger('query', query);
+      logger('requets.query', ctx.request.query);
+      const query = ctx.request.query;
+      logger('query', ctx.request.query);
       const users = await User.findAll().map(item => item.email);
       logger('users', users);
       const tags = await Tag.findAll().map(item => item.name);

@@ -1,20 +1,21 @@
 extends ./layouts/layout.pug
 
 block content
-  .jumbotron
-    h1.display-3 Hello, world!
-    p.lead
-      | This is a simple task manager!
-    hr.my-4
-    p
-      | You should sign up to start using, then sign in and create tasks for other users.
-    p.lead
-      +formFor({}, { url: urlFor('newUser') })
-        button.btn.btn-primary.btn-lg(type='submit', aria-pressed='true') Create user
-    hr.my-4
-    p
-      | if you are already done it before, just sign in.
-    p.lead
-      +formFor({}, { url: urlFor('newSessions') })
-        button.btn.btn-primary.btn-lg(type='submit', aria-pressed='true') Sign in
+  if !signedId
+    .jumbotron
+      h1.display-3 Hello, world!
+      p.lead
+        | This is a simple task manager!
+      hr.my-4
+      p
+        | You should sign up to start using, then sign in and create tasks for other users.
+      p.lead
+        +formFor({}, { url: urlFor('newUser') })
+          button.btn.btn-primary.btn-lg(type='submit', aria-pressed='true') Create user
+      hr.my-4
+      p
+        | if you are already done it before, just sign in.
+      p.lead
+        +formFor({}, { url: urlFor('newSessions') })
+          button.btn.btn-primary.btn-lg(type='submit', aria-pressed='true') Sign in
       

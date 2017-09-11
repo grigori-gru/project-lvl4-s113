@@ -14,7 +14,7 @@ block content
             td
               if signedId == user.id 
                 .btn-group
-                  +formFor(user, { url: urlFor('usersIdEdit', user.id), confirm: `Are you sure you want to edit ${user.firstName}?`})
+                  +formFor(user, { url: urlFor('usersIdEdit', user.id) })
                     button.btn.btn-link(type='submit')= 'Edit'
                   +formFor(user, { url: urlFor('usersDelete', user.id), method: 'delete', confirm: `Are you sure you want to delete ${user.firstName}?`})
                     button.btn.btn-link(type='submit')= 'Delete'

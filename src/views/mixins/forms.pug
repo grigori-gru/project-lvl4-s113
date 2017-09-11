@@ -11,7 +11,7 @@ mixin formFor(f, options = {})
     block
 
 mixin input(f, property, options = { as: 'text', small: false })
-  - const value = f.object[property] === undefined ? '' : f.object[property]
+  - const value = (f.object[property] === undefined || options['as'] === 'password') ? '' : f.object[property]
   - const small = _.get(options, 'small');
   .form-group(class=(f.errors[property] && 'has-danger'))
     label= property
@@ -25,14 +25,6 @@ mixin button(f, value = 'Save', type = 'submit')
   .form-group
     input(class='btn' type=`${type}` value=`${value}`)
       
-mixin buttonLink(value, options = { type: 'submit', disabled: false })
-  - const type = _.get(options, 'type') || 'submit';
-  - const disabled = _.get(options, 'disabled');
-  if disabled
-    button.btn.btn-link(type= `${type}`, disabled='', value= `${value}`)
-  else
-    button.btn.btn-link(type= `${type}`, value= `${value}`)
-
 mixin select(f, property, options)
   .form-group(class=(f.errors[property] && 'has-danger'))
     label= property

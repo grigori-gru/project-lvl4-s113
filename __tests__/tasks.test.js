@@ -61,6 +61,11 @@ describe('requests', () => {
     cookie = cookies.join(';');
   });
 
+  it('GET /tasks start', async () => {
+    const res = await request(server)
+      .get('/tasks?assignedTo=1%40m.ru&status=New&tag=one');
+    expect(res).toHaveHTTPStatus(200);
+  });
 
   it('GET /tasks/new', async () => {
     const res = await request(server)

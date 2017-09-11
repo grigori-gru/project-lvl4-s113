@@ -2,6 +2,13 @@ extends ../layouts/layout.pug
 
 block content
   
+  .container.mb-5
+    form.form-inline(action=urlFor('tasks')).justify-content-center
+      +searchSelect('Assigned to', 'assignedTo', users)
+      +searchSelect('Status', 'status', statuses)
+      +searchSelect('Tags', 'tag', tags)
+      +button(f, 'Filter')
+
   if tasks.length > 0
       table.table.table-info
         tr
@@ -12,40 +19,21 @@ block content
             td
               if signedEmail == task.creator || signedEmail == task.assignedTo
                 +formFor(task, { url: urlFor('tasksShow', task.id) })
-                  //- +buttonLink(task.name)
                   button.btn.btn-link(type='submit')= task.name
               else 
                 button.btn.btn-link(type='button', disabled='')= task.name
-                //- button.btn.btn-link(type='button', disabled='')= task.name
               td
                 if signedEmail == task.creator 
                   .btn-group
                     +formFor(task, { url: urlFor('tasksIdEdit', task.id), confirm: `Are you sure you want to edit ${task.name}?`})
                       button.btn.btn-link(type='submit')= 'Edit'
-                      //- +buttonLink('Edit')
                     +formFor(task, { url: urlFor('tasksDelete', task.id), method: 'delete', confirm: `Are you sure you want to delete ${task.name}?`})
                       button.btn.btn-link(type='submit')= 'Delete'
-                      //- +buttonLink('Delete')
                 else    
                   button.btn.btn-link(type='button', disabled='') Edit
                   button.btn.btn-link(type='button', disabled='') Delete
-                  //- +buttonLink('Delete', { disabled: true, type: 'button' })
-                  //- +buttonLink('Edit', { disabled: true, type: 'button' })
   else
     .alert.alert-info(role='alert')
       | There is no any task...
   +formFor({}, { url: urlFor('newTask') })
     button.btn.btn-primary(type='submit', aria-pressed='true') Create task
-
-  .container
-    .row
-      #filter-panel.collapse.filter-panel
-        .card.card-body
-          form.form-inline(action=urlFor('tasks'))
-            +searchSelect('Assigned to', 'assignedTo', users)
-            +searchSelect('Status', 'status', statuses)
-            +searchSelect('Tags', 'tag', tags)
-            +button(f)
-      button.btn.btn-primary(type='button', data-toggle='collapse', data-target='#filter-panel')
-        span.glyphicon.glyphicon-cog
-          |  Advanced Search
