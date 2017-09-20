@@ -20,7 +20,7 @@ gulp.task('console', () => {
 
 gulp.task('init', async () => {
   await init();
-  console.log('db created');
+  // console.log('db created');
 });
 
 gulp.task('server', () =>
