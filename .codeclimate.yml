@@ -1,4 +1,14 @@
 engines:
   eslint:
     enabled: true
-    channel: "eslint-3"
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+exclude_paths:
+- "node_modules/"
+- "__tests__"
+ratings:
+   paths:
+   - "src/**"
